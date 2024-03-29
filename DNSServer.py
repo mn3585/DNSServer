@@ -1,3 +1,4 @@
+
 import dns.message
 import dns.rdatatype
 import dns.rdataclass
@@ -75,12 +76,13 @@ dns_records = {
             86400, #minimum
         ),
     },
+  
     'nyu.edu.': {
         dns.rdatatype.A: '192.168.1.106',
-        dns.rdatatype.TXT: ('a string cast version of your encrypted secret data from step 3'),
+        dns.rdatatype.TXT: [base64.urlsafe_b64encode(encrypted_value).decode('utf-8')],
         dns.rdatatype.MX: [(10, 'mxa-00256a01.gslb.pphosted.com.')],
         dns.rdatatype.AAAA: '2001:0db8:85a3:0000:0000:8a2e:0373:7312',
-        dns.rdatatype.NS: 'ns1.nyu.edu.',   
+        dns.rdatatype.NS: ['ns1.nyu.edu.'],
     },
     # Add more records as needed (see assignment instructions!
 }
@@ -116,7 +118,7 @@ def run_dns_server():
                         rdata_list.append(MX(dns.rdataclass.IN, dns.rdatatype.MX, pref, server))
                 elif qtype == dns.rdatatype.SOA:
                     mname, rname, serial, refresh, retry, expire, minimum = answer_data # What is the record format? See dns_records dictionary. Assume we handle @, Class, TTL elsewhere. Do some research on SOA Records
-                    rdata = SOA(dns.rdataclass.IN, dns.rdatatype.SOA, mname=mname, rname, serial, refresh, retry, expire, minimum) # follow format from previous line
+                    rdata = SOA(dns.rdataclass.IN, dns.rdatatype.SOA, mname=mname, rname=rname, serial=serial, refresh=refresh, retry=retry, expire=expire, minimum=minimum) # follow format from previous line
                     rdata_list.append(rdata)
                 else:
                     if isinstance(answer_data, str):
