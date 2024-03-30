@@ -31,33 +31,25 @@ def generate_aes_key(password, salt):
     key = base64.urlsafe_b64encode(key)
     return key
 
+# Lookup details on fernet in the cryptography.io documentation    
 def encrypt_with_aes(input_string, password, salt):
-    key = generate_aes_key(password, salt)  # Generate the AES key based on password and salt
+    key = generate_aes_key(password, salt)
     f = Fernet(key)
-    encrypted_data = f.encrypt(input_string.encode('utf-8'))
-    return base64.urlsafe_b64encode(encrypted_data).decode('utf-8')  
+    encrypted_data = f.encrypt(input_string.encode('utf-8')) #call the Fernet encrypt method
+    return encrypted_data    
 
-def decrypt_with_aes(encrypted_data_b64, password, salt):
-    key = generate_aes_key(password, salt)  # Generate the AES key based on password and salt
+def decrypt_with_aes(encrypted_data, password, salt):
+    key = generate_aes_key(password, salt)
     f = Fernet(key)
-    encrypted_data = base64.urlsafe_b64decode(encrypted_data_b64.encode('utf-8'))
-    decrypted_data = f.decrypt(encrypted_data)  # Decrypt the original encrypted data
-    return decrypted_data.decode('utf-8')
+    decrypted_data = f.decrypt(encrypted_data) #call the Fernet decrypt method
+    return decrypted_data.decode('utf-8') 
 
-# Example usage
-salt = b"Tandon"
+salt = b'Tandon' # Remember it should be a byte-object
 password = "mn3585@nyu.edu"
 input_string = "AlwaysWatching"
 
-# Encrypt data and encode in Base64 for DNS TXT record storage
-encrypted_data_b64 = encrypt_with_aes(input_string, password, salt)
-
-# Simulate storing and retrieving the encoded encrypted data from a DNS TXT record
-# For example purposes, we use the variable directly. In practice, this data would be stored and retrieved from the DNS TXT record.
-retrieved_encrypted_data_b64 = encrypted_data_b64
-
-# Decode from Base64 and decrypt data
-decrypted_data = decrypt_with_aes(retrieved_encrypted_data_b64, password, salt)
+encrypted_value = encrypt_with_aes(input_string, password, salt) # exfil function
+decrypted_value = decrypt_with_aes(encrypted_value, password, salt)  # exfil function
 
 # For future use    
 def generate_sha256_hash(input_string):
