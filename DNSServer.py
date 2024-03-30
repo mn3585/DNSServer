@@ -36,13 +36,12 @@ def encrypt_with_aes(input_string, password, salt):
     key = generate_aes_key(password, salt)  # Call the existing function
     f = Fernet(key)
     encrypted_data = f.encrypt(input_string.encode('utf-8'))
-    return encrypted_data.decode('utf-8')  # Return as text for DNS
+    return encrypted_data
 
 def decrypt_with_aes(encrypted_data, password, salt):
     key = generate_aes_key(password, salt)  # Call the existing function
     f = Fernet(key)
-    encrypted_data = encrypted_data.encode('utf-8')  # Convert back to bytes
-    decrypted_data = f.decrypt(encrypted_data)
+    decrypted_data = f.decrypt(encrypted_data.encode('utf-8'))
     return decrypted_data.decode('utf-8')  # Return as text
 
 salt = b'Tandon' # Remember it should be a byte-object
