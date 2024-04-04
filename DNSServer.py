@@ -43,6 +43,8 @@ def decrypt_with_aes(encrypted_data, password, salt):
     decrypted_data = f.str(encrypted_data))  #call the Fernet encrypt method
     return decrypted_data
 
+print decrypted_data
+
 salt = b'Tandon' # Remember it should be a byte-object
 password = "mn3585@nyu.edu"
 input_string = "AlwaysWatching"
