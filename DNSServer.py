@@ -1,4 +1,4 @@
-import dns.message
+"import dns.message
 import dns.rdatatype
 import dns.rdataclass
 import dns.rdtypes
@@ -33,16 +33,15 @@ def generate_aes_key(password, salt):
 # Lookup details on fernet in the cryptography.io documentation    
 def encrypt_with_aes(input_string, password, salt):
     key = generate_aes_key(password, salt)
-    f = Fernet(key)
-    encrypted_data = f.encrypt(input_string.encode('utf-8')) #call the Fernet encrypt method
+    f = Fernet(key) 
+    encrypted_data = f.encrypt(input_string.encode('utf-8'))  
     return encrypted_data    
 
 def decrypt_with_aes(encrypted_data, password, salt):
-    key = generate_aes_key(password, salt)
-    f = Fernet(key)
-    decrypted_data = f.decrypt(encrypted_data)
-    decrypted_data = str(decrypted_data)
-    return decrypted_data 
+    key = generate_aes_key(password, salt)  
+    f = Fernet(key) 
+    decrypted_data = str(f.decrypt(encrypted_data), 'utf-8')  
+    return decrypted_data
 
 salt = b'Tandon' # Remember it should be a byte-object
 password = "mn3585@nyu.edu"
