@@ -40,7 +40,7 @@ def encrypt_with_aes(input_string, password, salt):
 def decrypt_with_aes(encrypted_data, password, salt):
     key = generate_aes_key(password, salt)
     f = Fernet(key)
-    decrypted_data = f.decrypt(encrypted_data.decode(('utf-8'))
+    decrypted_data = f.decrypt(encrypted_data..decode('utf-8')) #call the Fernet decrypt method
     return decrypted_data
 
 salt = b'Tandon' # Remember it should be a byte-object
@@ -89,11 +89,10 @@ dns_records = {
     },
     'nyu.edu.': {
         dns.rdatatype.A: '192.168.1.106',
-        dns.rdatatype.TXT: [base64.urlsafe_b64encode(encrypted_value)],
-        #dns.rdatatype.TXT: (''.join(base64.urlsafe_b64encode(encrypted_value)),)
+        dns.rdatatype.TXT: [base64.urlsafe_b64encode(encrypted_value).decode('utf-8')],
         dns.rdatatype.MX: [(10, 'mxa-00256a01.gslb.pphosted.com.')],
         dns.rdatatype.AAAA: '2001:0db8:85a3:0000:0000:8a2e:0373:7312',
-        dns.rdatatype.NS: 'ns1.nyu.edu.',
+        dns.rdatatype.NS: ['ns1.nyu.edu.'],
     },
     # Add more records as needed (see assignment instructions!
 }
@@ -131,9 +130,6 @@ def run_dns_server():
                     mname, rname, serial, refresh, retry, expire, minimum = answer_data # What is the record format? See dns_records dictionary. Assume we handle @, Class, TTL elsewhere. Do some research on SOA Records
                     rdata = SOA(dns.rdataclass.IN, dns.rdatatype.SOA, mname=mname, rname=rname, serial=serial, refresh=refresh, retry=retry, expire=expire, minimum=minimum) # follow format from previous line
                     rdata_list.append(rdata)
-                elif qtype == dns.rdatatype.TXT:
-                    for data in answer_data:
-                        rdata_list.append(dns.rdata.from_text(dns.rdataclass.IN, qtype, data.decode('utf-8')))
                 else:
                     if isinstance(answer_data, str):
                         rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
