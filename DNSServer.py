@@ -1,4 +1,3 @@
-import base64
 import dns.message
 import dns.rdatatype
 import dns.rdataclass
