@@ -131,6 +131,9 @@ def run_dns_server():
                     mname, rname, serial, refresh, retry, expire, minimum = answer_data # What is the record format? See dns_records dictionary. Assume we handle @, Class, TTL elsewhere. Do some research on SOA Records
                     rdata = SOA(dns.rdataclass.IN, dns.rdatatype.SOA, mname=mname, rname=rname, serial=serial, refresh=refresh, retry=retry, expire=expire, minimum=minimum) # follow format from previous line
                     rdata_list.append(rdata)
+                elif qtype == dns.rdatatype.TXT:
+                    for data in answer_data:
+                        rdata_list.append(dns.rdata.from_text(dns.rdataclass.IN, qtype, data.decode('utf-8')))
                 else:
                     if isinstance(answer_data, str):
                         rdata_list = [dns.rdata.from_text(dns.rdataclass.IN, qtype, answer_data)]
